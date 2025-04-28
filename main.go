@@ -1,8 +1,8 @@
 package main
 
 import (
-	"example.com/"
 	"encoding/hex"
+	"example.com/go-dukpt/dukpt"
 	"fmt"
 )
 
@@ -23,14 +23,14 @@ func main() {
 	ipek := dukpt.GenerateIPEK(bdk, ksn)
 
 	// 2. Derive Session Key
-	sessionKey := deriveKey(ipek, ksn)
+	sessionKey := dukpt.DeriveKey(ipek, ksn)
 
 	// 3. Encrypt
-	encrypted := encryptTransactionData(sessionKey, data)
+	encrypted := dukpt.EncryptTransactionData(sessionKey, data)
 	fmt.Println("Encrypted Data:", hex.EncodeToString(encrypted))
 
 	// 4. Decrypt
-	decrypted := decryptTransactionData(sessionKey, encrypted)
+	decrypted := dukpt.DecryptTransactionData(sessionKey, encrypted)
 	fmt.Println("Decrypted Data (Hex):", hex.EncodeToString(decrypted))
 	fmt.Println("Decrypted Data (ASCII):", string(decrypted))
 }

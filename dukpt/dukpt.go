@@ -66,7 +66,7 @@ func GenerateIPEK(bdk, ksn []byte) []byte {
 }
 
 // Derive transaction key
-func deriveKey(ipek, ksn []byte) []byte {
+func DeriveKey(ipek, ksn []byte) []byte {
 	counter := make([]byte, 3)
 	copy(counter, ksn[7:])
 	counter[0] &= 0x1F // 5 bits only
@@ -82,15 +82,15 @@ func deriveKey(ipek, ksn []byte) []byte {
 			newKSN[6] |= byte((bit >> 8) & 0xFF)
 			newKSN[7] |= byte(bit & 0xFF)
 
-			curKey = generateSessionKey(curKey, newKSN)
+			curKey = GenerateSessionKey(curKey, newKSN)
 		}
 	}
 
-	return generateSessionKey(curKey, ksn)
+	return GenerateSessionKey(curKey, ksn)
 }
 
 // Generate session key
-func generateSessionKey(key, ksn []byte) []byte {
+func GenerateSessionKey(key, ksn []byte) []byte {
 	leftKey := key[:8]
 	rightKey := key[8:]
 
@@ -115,11 +115,11 @@ func generateSessionKey(key, ksn []byte) []byte {
 }
 
 // Encrypt transaction data using DUKPT
-func encryptTransactionData(sessionKey, data []byte) []byte {
+func EncryptTransactionData(sessionKey, data []byte) []byte {
 	return TripleDESEncrypt(sessionKey, data)
 }
 
 // Decrypt transaction data using DUKPT
-func decryptTransactionData(sessionKey, encryptedData []byte) []byte {
+func DecryptTransactionData(sessionKey, encryptedData []byte) []byte {
 	return TripleDESDecrypt(sessionKey, encryptedData)
 }
