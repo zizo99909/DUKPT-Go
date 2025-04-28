@@ -2,8 +2,16 @@ package dukpt
 
 import "crypto/des"
 
+func expandKey(key []byte) []byte {
+	if len(key) == 16 {
+		return append(key, key[:8]...)
+	}
+	return key
+}
+
 // 3DES Encrypt
 func TripleDESEncrypt(key, data []byte) []byte {
+	key = expandKey(key)
 	block, err := des.NewTripleDESCipher(key)
 	if err != nil {
 		panic(err)
@@ -15,6 +23,7 @@ func TripleDESEncrypt(key, data []byte) []byte {
 
 // 3DES Decrypt
 func TripleDESDecrypt(key, data []byte) []byte {
+	key = expandKey(key)
 	block, err := des.NewTripleDESCipher(key)
 	if err != nil {
 		panic(err)
@@ -96,7 +105,7 @@ func GenerateSessionKey(key, ksn []byte) []byte {
 
 	// Mask
 	ksnMasked := make([]byte, 8)
-	copy(ksnMasked, ksn[2:10])
+	copy(ksnMasked, ksn[2:])
 	ksnMasked[5] &= 0xE0
 	ksnMasked[6] = 0x00
 	ksnMasked[7] = 0x00

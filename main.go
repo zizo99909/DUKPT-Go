@@ -6,8 +6,6 @@ import (
 	"fmt"
 )
 
-// --- Helper Functions ---
-
 func main() {
 	// Example Inputs
 	bdkHex := "0123456789ABCDEFFEDCBA9876543210"
